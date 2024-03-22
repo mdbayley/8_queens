@@ -44,12 +44,12 @@ namespace _8_Queens
 
         private static int CalculateRow(int index)
         {
-            return 0;
+            return index / 8;
         }
 
         private static int CalculateCol(int index)
         {
-            return 0;
+            return index % 8;
         }
 
         private static int CalculateDfs(int index)
