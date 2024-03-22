@@ -20,7 +20,7 @@ namespace _8_Queens
                 var count = Solver.Solve(dimension, out var solutions);
                 stopwatch.Stop();
 
-                Console.WriteLine($"For {dimension} there are {count} solutions [{stopwatch.ElapsedMilliseconds:#,##0}] ms");
+                Console.WriteLine($"For {dimension} there are {count} solutions [{stopwatch.ElapsedMilliseconds:#,##0} ms]");
 
                 if (showSolutions)
                 {

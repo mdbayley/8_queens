@@ -13,18 +13,16 @@ namespace _8_Queens
             // This allows an invalidated square to set its bit to 0 without needing to re-evaluate all the squares' contents
             // To determine if a row, col, dfs or dbs alreaqdy has a value, simply check for > 0
 
-            var rows = Enumerable.Repeat(0ul, dimension).ToArray();
-            var cols = Enumerable.Repeat(0ul, dimension).ToArray();
-            var dfss = Enumerable.Repeat(0ul, dimension * 2 - 1).ToArray();
-            var dbss = Enumerable.Repeat(0ul, dimension * 2 - 1).ToArray();
+            //var rows = Enumerable.Repeat(0ul, dimension).ToArray();
+            //var cols = Enumerable.Repeat(0ul, dimension).ToArray();
+            //var dfss = Enumerable.Repeat(0ul, dimension * 2 - 1).ToArray();
+            //var dbss = Enumerable.Repeat(0ul, dimension * 2 - 1).ToArray();
 
-            Console.WriteLine($"Rows={rows.Length}, Columns={cols.Length}, DFSs={dfss.Length}, DBSs={dbss.Length}");
+            //* Console.WriteLine($"Rows={rows.Length}, Columns={cols.Length}, DFSs={dfss.Length}, DBSs={dbss.Length}");
             
             // It is not a "grid" as such, it is a single-dimentional array, but the contents include their logical "column and row"
             var grid = BuildGrid(dimension);
 
-            // Stack allows going backward
-            var queens = new Stack<int>();
             
             // Because every square evaluated should provide every possible solution containing that square,
             // and because every possible solution must contain a square in each row,
@@ -32,43 +30,54 @@ namespace _8_Queens
 
             for (var start = 0; start < dimension; start++)
             {
+                var rows = Enumerable.Repeat(0ul, dimension).ToArray();
+                var cols = Enumerable.Repeat(0ul, dimension).ToArray();
+                var dfss = Enumerable.Repeat(0ul, dimension * 2 - 1).ToArray();
+                var dbss = Enumerable.Repeat(0ul, dimension * 2 - 1).ToArray();
+
+                var queens = new List<int>();
+
                 for (var index = start; index < grid.Length; index++)
                 {
+                    //* Console.WriteLine($"--- {start},{index} ---");
+
                     var square = grid[index];
 
-                    Console.WriteLine(square);
+                    //* Console.WriteLine(square.ToString(rows, cols, dfss, dbss));
 
                     if (rows[square.Row] == 0 && cols[square.Col] == 0 && dfss[square.Dfs] == 0 && dbss[square.Dbs] == 0)
                     {
                         // We have a Queen
 
-                        rows[square.Row] |= (ulong)(2 ^ index); // Set Row to contain a Queen
-                        cols[square.Col] |= (ulong)(2 ^ index); // Set Col to contain a Queen
-                        dfss[square.Dfs] |= (ulong)(2 ^ index); // Set Dfs to contain a Queen
-                        rows[square.Row] |= (ulong)(2 ^ index); // Set Dbs to contain a Queen
+                        queens.Add(index);
+                        //* Console.WriteLine($">>> {queens.Count}");
 
-                        queens.Push(index);
+                        square.HasQueen = true;
+
+                        var bit = (ulong)Math.Pow(2, index);
+                        //* Console.WriteLine($"BIT: {bit} [{Convert.ToString((long)bit, 2)}]");
+
+                        rows[square.Row] |= bit; // Set Row to contain a Queen
+                        cols[square.Col] |= bit; // Set Col to contain a Queen
+                        dfss[square.Dfs] |= bit; // Set Dfs to contain a Queen
+                        dbss[square.Dbs] |= bit; // Set Dbs to contain a Queen
+
+                        //* Console.WriteLine(square.ToString(rows, cols, dfss, dbss));
+                        //* Console.WriteLine();
 
                         if (queens.Count == dimension)
                         {
                             // We have a solution
                             solutions.Add(queens.ToArray());
+                            //* Console.WriteLine("*******");
                             break;
                         }
-
-                        // We have a Queen in the row, move to the next row
-                        // Unless we are in the last row, which means although we found a Queen, we never found a solution
-
-                        if (square.Row == dimension - 1)
-                        {
-                            // Last row, no solution
-                            break;
-                        }
-
-                        // Start of next row
-                        index = (square.Row + 1) * dimension;
                     }
+
+                    //* Console.WriteLine();
                 }
+
+                //* Console.WriteLine();
             }
 
             return solutions.Count;

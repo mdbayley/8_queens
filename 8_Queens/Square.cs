@@ -1,4 +1,6 @@
 ﻿
+using System.Runtime.Serialization;
+
 namespace _8_Queens
 {
     internal struct Square
@@ -27,6 +29,16 @@ namespace _8_Queens
         public override string ToString()
         {
             return $"Index={Index}, HasQueen={HasQueen}, Row={Row}, Col={Col}, DFS={Dfs}, DBS={Dbs}";
+        }
+
+        public string ToString(ulong[] rows, ulong[] cols, ulong[] dfss, ulong[] dbss)
+        {
+            return $"Index={Index}, " +
+                   $"HasQueen={HasQueen}, " +
+                   $"Row={Row}[{Convert.ToString((long)rows[Row], 2)}], " +
+                   $"Col={Col}[{Convert.ToString((long)cols[Col], 2)}]," +
+                   $" DFS={Dfs}[{Convert.ToString((long)dfss[Dfs], 2)}], " +
+                   $"DBS={Dbs}[{Convert.ToString((long)dbss[Dbs], 2)}]";
         }
     }
 }
