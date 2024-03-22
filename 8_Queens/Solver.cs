@@ -8,6 +8,11 @@ namespace _8_Queens
     {
         public static int Solve(int dimension, out List<int[]> solutions)
         {
+            if (dimension > 8)
+            {
+                throw new ArgumentOutOfRangeException(nameof(dimension), "There is 64-bit state using a bit per grid square, so 8 is max dimension");
+            }
+
             solutions = new List<int[]>();
 
             var grid = BuildGrid(dimension);
