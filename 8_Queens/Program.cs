@@ -1,13 +1,39 @@
 ﻿using System.Diagnostics;
-using _8_Queens;
 
-var stopwatch = Stopwatch.StartNew();
-
-var results = Solver.Solve();
-
-Console.WriteLine($"{results.Count} results, {stopwatch.ElapsedMilliseconds:#,##0} ms");
-Console.WriteLine("---");
-foreach (var result in results)
+namespace _8_Queens
 {
-    Console.WriteLine(string.Join(',', result));
+    internal class Program
+    {
+        public static void Main(string[] args)
+        {
+            var showSolutions = args.Length == 0;
+
+            Solve(4, showSolutions);
+
+        }
+
+        private static void Solve(int dimension, bool showSolutions)
+        {
+            try
+            {
+                var stopwatch = Stopwatch.StartNew();
+                var count = Solver.Solve(dimension, out var solutions);
+                stopwatch.Stop();
+
+                Console.WriteLine($"For {dimension} there are {count} solutions [{stopwatch.ElapsedMilliseconds:#,##0}] ms");
+
+                if (showSolutions)
+                {
+                    foreach (var solution in solutions)
+                    {
+                        Console.WriteLine(string.Join(',', solution));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An ERROR occurred solving {dimension}\n{ex}");
+            }
+        }
+    }
 }
