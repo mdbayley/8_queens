@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS0675 // Bitwise-or operator used on a sign-extended operand
+﻿
 namespace _8_Queens
 {
     // DFS = Diagonal Forward Slash
@@ -6,24 +6,18 @@ namespace _8_Queens
 
     internal static class Solver
     {
-        public static int Solve(int dimension, out List<int[]> solutions, bool debug = false)
+        public static int Solve(int dimension, out List<int[]> solutions)
         {
             solutions = new List<int[]>();
 
             var grid = BuildGrid(dimension);
-
             
             // Because every square evaluated should provide every possible solution containing that square,
             // and because every possible solution must contain a square in each row,
-            // you only need to evaluate ONE row (first row) to get all possible solutions. TBD
+            // you only need to evaluate ONE row (first row) to get all possible solutions.
 
             for (var start = 0; start < dimension; start++)
             {
-                if (debug)
-                {
-                    Console.WriteLine($"=== {start} ===");
-                }
-
                 var rows = Enumerable.Repeat(0ul, dimension).ToArray();
                 var cols = Enumerable.Repeat(0ul, dimension).ToArray();
                 var dfss = Enumerable.Repeat(0ul, dimension * 2 - 1).ToArray();
@@ -35,37 +29,21 @@ namespace _8_Queens
                 {
                     var square = grid[index];
 
-                    if (debug)
-                    {
-                        Console.WriteLine($"{index} ({square.Row}, {square.Col}) [{start}] {square.ToString(rows, cols, dfss, dbss)}");
-                    }
-
+                    // Check nothing in this Row, Col, DFS or DBS
                     if (rows[square.Row] == 0 && cols[square.Col] == 0 && dfss[square.Dfs] == 0 && dbss[square.Dbs] == 0)
                     {
                         // We have a Queen
 
-                        queens.Push(index);
-
                         square.HasQueen = true;
 
-                        if (debug && square.HasQueen)
-                        {
-                            Console.WriteLine($"Q{queens.Count}");
-                        }
-
                         AddToGrid(square, rows, cols, dfss, dbss);
+
+                        queens.Push(index);
                     }
 
                     if (queens.Count == dimension)
                     {
                         solutions.Add(queens.ToArray());
-
-                        if (debug)
-                        {
-                            Console.WriteLine();
-                            Console.WriteLine($"FOUND SOLUTION: {string.Join(',', queens)}");
-                            Console.WriteLine();
-                        }
 
                         // skip the rest of this iteration and move to checking backwards...
                         index = grid.Length - 1;
@@ -78,43 +56,29 @@ namespace _8_Queens
                         // Removing the last Queen will eventually work its way back through the stack as each iteration eventually fails to find a Queen
                         // We stay in the same loop as we are rewinding the index
 
-                        if (queens.Count == 0) break;
-
-                        if (debug)
-                        {
-                            Console.WriteLine($"BEFORE: {string.Join(',', queens)}");
-                        }
+                        if (queens.Count == 0) break; // Done when no previous Queens on stack
 
                         // Remove last Queen from State
                         var lastQueen = grid[queens.Pop()];
                         RemoveFromGrid(lastQueen, rows, cols, dfss, dbss);
 
-
-                        // If last Queen is last square, go back to Queen before
+                        // If last Queen is last square, go back to Queen before that, else it will end prematurely
                         if (lastQueen.Index == grid.Length - 1)
                         {
-                            RemoveFromGrid(lastQueen, rows, cols, dfss, dbss);
                             lastQueen = grid[queens.Pop()];
+                            RemoveFromGrid(lastQueen, rows, cols, dfss, dbss);
                         }
 
-                        if (debug)
-                        {
-                            Console.WriteLine($"AFTER: {string.Join(',', queens)}");
-                            Console.WriteLine($"!!!!! {lastQueen.ToString(rows, cols, dfss, dbss)}");
-                        }
-
+                        // Don't re-iterate start, because it will iterate to start+1 in this loop,
+                        // and start will increment to start+1 in the next loop,
+                        // resulting in duplicate solutions
                         if (lastQueen.Index <= start)
                         {
                             break;
                         }
 
+                        // Go back
                         index = lastQueen.Index;
-
-                        if (debug)
-                        {
-                            Console.WriteLine($"!!!!! {lastQueen.ToString(rows, cols, dfss, dbss)}");
-                            Console.WriteLine($"<<<<< Going back to {index} {lastQueen.ToString(rows, cols, dfss, dbss)}");
-                        }
                     }
                 }
             }

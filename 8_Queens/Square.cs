@@ -1,6 +1,4 @@
 ﻿
-using System.Runtime.Serialization;
-
 namespace _8_Queens
 {
     internal struct Square
@@ -8,24 +6,21 @@ namespace _8_Queens
         public Square(int index, int row, int col, int dfs, int dbs)
         {
             Index = index;
-
             HasQueen = false;
-
             Row = row;
             Col = col;
             Dfs = dfs;
             Dbs = dbs;
         }
 
-        public int Index; // this is likely redundant...
-
+        public int Index;
         public bool HasQueen;
-
         public int Row;
         public int Col;
         public int Dfs;
         public int Dbs;
 
+        /*
         public override string ToString()
         {
             return $"Index={Index}, HasQueen={HasQueen}, Row={Row}, Col={Col}, DFS={Dfs}, DBS={Dbs}";
@@ -40,5 +35,6 @@ namespace _8_Queens
                    $" DFS={Dfs}[{Convert.ToString((long)dfss[Dfs], 2)}], " +
                    $"DBS={Dbs}[{Convert.ToString((long)dbss[Dbs], 2)}]";
         }
+        */
     }
 }

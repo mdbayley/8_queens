@@ -4,23 +4,31 @@ namespace _8_Queens
 {
     internal class Program
     {
-            public static void Main(string[] args)
+        public static void Main(string[] args)
+        {
+            try
             {
                 var showSolutions = args.Length > 0;
 
-                //Solve(4, showSolutions, true);
-                Solve(5, showSolutions, true);
-                //Solve(6, showSolutions, true);
-                //Solve(7, showSolutions, true);
-                //Solve(8, showSolutions, true);
+                Solve(4, showSolutions);
+                Solve(5, showSolutions);
+                Solve(6, showSolutions);
+                Solve(7, showSolutions);
+                Solve(8, showSolutions);
             }
+            finally
+            {
+                Console.WriteLine("Done.");
+                Console.ReadKey();
+            }
+        }
 
-            private static void Solve(int dimension, bool showSolutions, bool debug)
+        private static void Solve(int dimension, bool showSolutions)
         {
             try
             {
                 var stopwatch = Stopwatch.StartNew();
-                var count = Solver.Solve(dimension, out var solutions, debug);
+                var count = Solver.Solve(dimension, out var solutions);
                 stopwatch.Stop();
 
                 Console.WriteLine($"For {dimension} there are {count} solutions [{stopwatch.ElapsedMilliseconds:#,##0} ms]");
