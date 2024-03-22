@@ -19,22 +19,5 @@ namespace _8_Queens
         public int Col;
         public int Dfs;
         public int Dbs;
-
-        /*
-        public override string ToString()
-        {
-            return $"Index={Index}, HasQueen={HasQueen}, Row={Row}, Col={Col}, DFS={Dfs}, DBS={Dbs}";
-        }
-
-        public string ToString(ulong[] rows, ulong[] cols, ulong[] dfss, ulong[] dbss)
-        {
-            return $"Index={Index}, " +
-                   $"HasQueen={HasQueen}, " +
-                   $"Row={Row}[{Convert.ToString((long)rows[Row], 2)}], " +
-                   $"Col={Col}[{Convert.ToString((long)cols[Col], 2)}]," +
-                   $" DFS={Dfs}[{Convert.ToString((long)dfss[Dfs], 2)}], " +
-                   $"DBS={Dbs}[{Convert.ToString((long)dbss[Dbs], 2)}]";
-        }
-        */
     }
 }

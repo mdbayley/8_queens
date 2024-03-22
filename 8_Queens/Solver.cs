@@ -121,6 +121,5 @@ namespace _8_Queens
 
             return grid;
         }
-
     }
 }
