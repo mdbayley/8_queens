@@ -44,6 +44,9 @@ namespace _8_Queens
                         AddToGrid(square, rows, cols, dfss, dbss);
 
                         queens.Push(index);
+
+                        // As we have found a Queen in this row, we can skip to the end of the row
+                        index += dimension - 1 - square.Col;
                     }
 
                     if (queens.Count == dimension)

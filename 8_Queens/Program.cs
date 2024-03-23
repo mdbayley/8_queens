@@ -14,12 +14,15 @@ namespace _8_Queens
                 Solve(5, showSolutions);
                 Solve(6, showSolutions);
                 Solve(7, showSolutions);
-                Solve(9, showSolutions);
+                Solve(8, showSolutions);
             }
             finally
             {
-                Console.WriteLine("Done.");
-                Console.ReadKey();
+                if (!Debugger.IsAttached)
+                {
+                    Console.WriteLine("Done.");
+                    Console.ReadKey();
+                }
             }
         }
 
