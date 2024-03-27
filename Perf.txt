@@ -1,0 +1,48 @@
+
+----------------------------
+8 Queens ulong (Release exe)
+----------------------------
+
+-------------------------------
+8 Queens BitArray (Release exe)
+-------------------------------
+For 4 there are 2 solutions [3 ms]
+--------
+For 5 there are 10 solutions [0 ms]
+--------
+For 6 there are 4 solutions [0 ms]
+--------
+For 7 there are 40 solutions [11 ms]
+--------
+For 8 there are 92 solutions [13 ms]
+--------
+For 9 there are 352 solutions [122 ms]
+--------
+For 10 there are 724 solutions [1,057 ms]
+--------
+For 11 there are 2680 solutions [8,801 ms]
+--------
+For 12 there are 14200 solutions [84,641 ms]
+--------
+
+------------------------------
+8 Queens GridMap (Release exe)
+------------------------------
+For 4 there are 2 solutions [5 ms]
+--------
+For 5 there are 10 solutions [0 ms]
+--------
+For 6 there are 4 solutions [1 ms]
+--------
+For 7 there are 40 solutions [19 ms]
+--------
+For 8 there are 92 solutions [20 ms]
+--------
+For 9 there are 352 solutions [122 ms]
+--------
+For 10 there are 724 solutions [982 ms]
+--------
+For 11 there are 2680 solutions [8,753 ms]
+--------
+For 12 there are 14200 solutions [85,644 ms]
+--------

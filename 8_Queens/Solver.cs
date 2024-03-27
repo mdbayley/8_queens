@@ -1,32 +1,40 @@
 ﻿
+
+using System;
+
 namespace _8_Queens
 {
-    // DFS = Diagonal Forward Slash
-    // DBS = Diagonal Back Slash
+    // DFD = Diagonal Forward (like forward-slash)
+    // DBK = Diagonal Back (like backslash)
 
     internal static class Solver
     {
         public static int Solve(int dimension, out List<int[]> solutions)
         {
-            if (dimension > 8)
+            if (dimension > 15)
             {
-                throw new ArgumentOutOfRangeException(nameof(dimension), "There is 64-bit state using a bit per grid square, so 8 is max dimension");
+                throw new ArgumentOutOfRangeException(nameof(dimension), $"{dimension} is invalid, index must be less than 16");
             }
-
             solutions = new List<int[]>();
 
             var grid = BuildGrid(dimension);
-            
+
+            var rows = Enumerable.Range(0, dimension).Select(_ => new GridMap()).ToArray();
+            var cols = Enumerable.Range(0, dimension).Select(_ => new GridMap()).ToArray();
+            var dfds = Enumerable.Range(0, dimension * 2 - 1).Select(_ => new GridMap()).ToArray();
+            var dbks = Enumerable.Range(0, dimension * 2 - 1).Select(_ => new GridMap()).ToArray();
+
+
             // Because every square evaluated should provide every possible solution containing that square,
             // and because every possible solution must contain a square in each row,
             // you only need to evaluate ONE row (first row) to get all possible solutions.
 
             for (var start = 0; start < dimension; start++)
             {
-                var rows = Enumerable.Repeat(0ul, dimension).ToArray();
-                var cols = Enumerable.Repeat(0ul, dimension).ToArray();
-                var dfss = Enumerable.Repeat(0ul, dimension * 2 - 1).ToArray();
-                var dbss = Enumerable.Repeat(0ul, dimension * 2 - 1).ToArray();
+                rows.Clear();
+                cols.Clear();
+                dfds.Clear();
+                dbks.Clear();
 
                 var queens = new Stack<int>();
 
@@ -34,14 +42,14 @@ namespace _8_Queens
                 {
                     var square = grid[index];
 
-                    // Check nothing in this Row, Col, DFS or DBS
-                    if (rows[square.Row] == 0 && cols[square.Col] == 0 && dfss[square.Dfs] == 0 && dbss[square.Dbs] == 0)
+                    // Check nothing in this Row, Col, DFD or DBK
+                    if (rows[square.Row].IsClear() && cols[square.Col].IsClear() && dfds[square.Dfd].IsClear() && dbks[square.Dbk].IsClear())
                     {
                         // We have a Queen
 
                         square.HasQueen = true;
 
-                        AddToGrid(square, rows, cols, dfss, dbss);
+                        AddToGrid(square, rows, cols, dfds, dbks);
 
                         queens.Push(index);
 
@@ -68,13 +76,13 @@ namespace _8_Queens
 
                         // Remove last Queen from State
                         var lastQueen = grid[queens.Pop()];
-                        RemoveFromGrid(lastQueen, rows, cols, dfss, dbss);
+                        RemoveFromGrid(lastQueen, rows, cols, dfds, dbks);
 
                         // If last Queen is last square, go back to Queen before that, else it will end prematurely
                         if (lastQueen.Index == grid.Length - 1)
                         {
                             lastQueen = grid[queens.Pop()];
-                            RemoveFromGrid(lastQueen, rows, cols, dfss, dbss);
+                            RemoveFromGrid(lastQueen, rows, cols, dfds, dbks);
                         }
 
                         // Don't re-iterate start, because it will iterate to start+1 in this loop,
@@ -94,24 +102,20 @@ namespace _8_Queens
             return solutions.Count;
         }
 
-        private static void AddToGrid(Square square, ulong[] rows, ulong[] cols, ulong[] dfss, ulong[] dbss)
+        private static void AddToGrid(Square square, GridMap[] rows, GridMap[] cols, GridMap[] dfds, GridMap[] dbks)
         {
-            var bit = (ulong)Math.Pow(2, square.Index);
-
-            rows[square.Row] |= bit; // Set Row to contain a Queen
-            cols[square.Col] |= bit; // Set Col to contain a Queen
-            dfss[square.Dfs] |= bit; // Set Dfs to contain a Queen
-            dbss[square.Dbs] |= bit; // Set Dbs to contain a Queen
+            rows[square.Row].Set(square.Index);
+            cols[square.Col].Set(square.Index);
+            dfds[square.Dfd].Set(square.Index);
+            dbks[square.Dbk].Set(square.Index);
         }
 
-        private static void RemoveFromGrid(Square square, ulong[] rows, ulong[] cols, ulong[] dfss, ulong[] dbss)
+        private static void RemoveFromGrid(Square square, GridMap[] rows, GridMap[] cols, GridMap[] dfds, GridMap[] dbks)
         {
-            var bit = (ulong)Math.Pow(2, square.Index);
-            
-            rows[square.Row] &= ~bit; // Remove last Queen from Row
-            cols[square.Col] &= ~bit; // Remove last Queen from Col
-            dfss[square.Dfs] &= ~bit; // Remove last Queen from DFS
-            dbss[square.Dbs] &= ~bit; // Remove last Queen from DBS
+            rows[square.Row].Reset(square.Index);
+            cols[square.Col].Reset(square.Index);
+            dfds[square.Dfd].Reset(square.Index);
+            dbks[square.Dbk].Reset(square.Index);
         }
 
         private static Square[] BuildGrid(int dimension)
