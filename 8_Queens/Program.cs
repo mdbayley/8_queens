@@ -11,10 +11,22 @@ namespace _8_Queens
                 var showSolutions = args.Length > 0;
 
                 Solve(4, showSolutions);
+
                 Solve(5, showSolutions);
+
                 Solve(6, showSolutions);
+
                 Solve(7, showSolutions);
+
                 Solve(8, showSolutions);
+                
+                Solve(9, showSolutions);
+                
+                Solve(10, showSolutions);
+                
+                Solve(11, showSolutions);
+                
+                Solve(12, showSolutions);
             }
             finally
             {
